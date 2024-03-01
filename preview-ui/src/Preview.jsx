@@ -1,74 +1,69 @@
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { Terminal } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
+import { Home, Search, Video, Bell } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { useState } from 'react';
 
-export default function CodeToGifLandingPage() {
-  const [code, setCode] = useState('// Your code here...');
-  const [gifUrl, setGifUrl] = useState('https://via.placeholder.com/400x300');
+export default function YouTubeHomepage() {
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleCodeChange = (e) => setCode(e.target.value);
-  const handleGenerateGif = () => {
-    // Simulate gif generation
-    setGifUrl('https://via.placeholder.com/400x300/000000/FFFFFF/?text=Generated+GIF');
-  };
+  const videos = [
+    { id: 1, title: "Learn React In 30 Minutes", views: "2.3M views", uploaded: "1 day ago", channel: "React Academy", channelImg: "https://github.com/Yuyz0112.png" },
+    // ... more videos
+  ];
 
   return (
     <div className="flex flex-col h-screen">
-      <header className="bg-white p-4 shadow-md">
-        <h1 className="text-xl font-bold">Code to GIF Maker</h1>
+      <header className="bg-white px-4 py-2 flex justify-between items-center shadow-md">
+        <div className="flex items-center space-x-2">
+          <Home className="w-6 h-6 text-gray-700" />
+          <h1 className="text-xl font-bold">YouTube</h1>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Input placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+          <Button variant="solid" className="px-4">
+            <Search className="w-4 h-4" />
+          </Button>
+        </div>
+        <div className="flex items-center space-x-4">
+          <Video className="w-6 h-6 text-gray-700" />
+          <Bell className="w-6 h-6 text-gray-700" />
+          <Avatar>
+            <AvatarImage src="https://github.com/Yuyz0112.png" />
+            <AvatarFallback>U</AvatarFallback>
+          </Avatar>
+        </div>
       </header>
-      <main className="flex-1 overflow-y-auto p-4 bg-gray-100">
-        <div className="max-w-4xl mx-auto">
-          <Alert>
-            <Terminal className="h-4 w-4" />
-            <AlertTitle>Get Started!</AlertTitle>
-            <AlertDescription>
-              Paste your code below and generate a GIF to share in presentations, blogs, or social media.
-            </AlertDescription>
-          </Alert>
-          <Card className="mt-6">
-            <CardHeader>
-              <CardTitle>Paste Your Code</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Textarea className="w-full h-64" value={code} onChange={handleCodeChange} />
-            </CardContent>
-            <CardFooter>
-              <Button onClick={handleGenerateGif}>Generate GIF</Button>
-            </CardFooter>
-          </Card>
-          <Tabs defaultValue="result" className="mt-6">
-            <TabsList>
-              <TabsTrigger value="result">Result</TabsTrigger>
-              <TabsTrigger value="how-it-works">How It Works</TabsTrigger>
-            </TabsList>
-            <TabsContent value="result" className="mt-4">
-              <AspectRatio ratio={16 / 9}>
+      <main className="flex-1 overflow-y-auto">
+        <ScrollArea className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {videos.map((video) => (
+            <div key={video.id} className="bg-white rounded shadow p-4">
+              <AspectRatio ratio={16 / 9} className="mb-2">
                 <img
-                  src={gifUrl}
-                  alt="Generated GIF"
+                  src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
+                  alt={video.title}
                   className="rounded-md object-cover"
                 />
               </AspectRatio>
-            </TabsContent>
-            <TabsContent value="how-it-works" className="mt-4">
-              <p>
-                Our tool takes your code snippet, runs it in a virtual environment, and captures the output as a GIF.
-                You can then download the GIF and use it wherever you like!
-              </p>
-            </TabsContent>
-          </Tabs>
-        </div>
+              <div className="flex items-center space-x-2 mb-2">
+                <Avatar>
+                  <AvatarImage src={video.channelImg} />
+                  <AvatarFallback>{video.channel[0]}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-lg font-medium">{video.title}</h3>
+                  <p className="text-sm text-gray-600">{video.channel}</p>
+                </div>
+              </div>
+              <p className="text-sm text-gray-500">{video.views} · {video.uploaded}</p>
+            </div>
+          ))}
+        </ScrollArea>
       </main>
       <footer className="bg-white p-4 shadow-md">
-        <p className="text-center text-sm text-gray-500">
-          © 2023 Code to GIF Maker. All rights reserved.
-        </p>
+        <p className="text-center text-sm text-gray-500">© 2021 YouTube, LLC</p>
       </footer>
     </div>
   );
